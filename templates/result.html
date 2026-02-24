@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - MediPredict AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="fade-in">
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">🏥 MediPredict AI</a>
+            <div class="ms-auto">
+                <a href="/" class="btn btn-outline-info btn-sm">New Analysis</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card p-5 text-center shadow-lg border-2 border-primary">
+                    <h5 class="text-info text-uppercase">Primary Prediction</h5>
+                    <h1 class="display-3 fw-bold my-3">{{ result.primary_prediction }}</h1>
+
+                    <div class="confidence-circle">
+                        {{ result.confidence }}%
+                    </div>
+
+                    <div class="mt-4">
+                        <span class="badge bg-{{ result.risk_color }} p-3 fs-5">Risk Level: {{ result.risk_level
+                            }}</span>
+                        <span class="badge bg-primary p-3 fs-5 ms-2">
+                            {% if result.model_agreement == 3 %}
+                            <i class="fas fa-check-circle"></i> 3 Models Agree
+                            {% else %}
+                            <i class="fas fa-exclamation-triangle"></i> {{ result.model_agreement }}/3 Models Agree
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 g-4">
+            <div class="col-md-6">
+                <div class="card h-100 p-4">
+                    <h4><i class="fas fa-robot text-accent"></i> Model Comparison</h4>
+                    <hr>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                            Random Forest: <span>{{ result.rf_prediction }} ✅</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                            Naive Bayes: <span>{{ result.nb_prediction }} ✅</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                            SVM: <span>{{ result.svm_prediction }} ✅</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 p-4">
+                    <h4><i class="fas fa-chart-bar text-warning"></i> Top 3 Possible Diseases</h4>
+                    <hr>
+                    <canvas id="top3Chart"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 p-4">
+                    <h4><i class="fas fa-file-alt text-primary"></i> Disease Description</h4>
+                    <hr>
+                    <p class="lead">{{ result.description }}</p>
+                    <div class="mt-auto">
+                        <h5 class="text-info">Severity Score: {{ result.severity_score }}/13</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 p-4">
+                    <h4><i class="fas fa-shIELD-alt text-info"></i> Precautions to Take</h4>
+                    <hr>
+                    <ul class="list-unstyled">
+                        {% for precaution in result.precautions %}
+                        <li class="mb-2"><i class="fas fa-check-circle text-accent me-2"></i> {{ precaution.capitalize()
+                            }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="https://www.google.com/search?q=when+to+see+a+doctor+for+{{ result.primary_prediction }}"
+                        target="_blank" class="btn btn-outline-danger mt-3">
+                        <i class="fas fa-user-md"></i> Consult a Doctor Immediately
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 p-4 bg-dark rounded border border-secondary shadow">
+            <h4>Your Symptoms:</h4>
+            <div>
+                {% for s in result.symptoms_entered %}
+                <span class="tag">{{ s }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="my-5 d-flex justify-content-center gap-3">
+            <a href="/" class="btn btn-lg btn-secondary px-5"><i class="fas fa-undo"></i> Try Again</a>
+            <a href="/download-report" class="btn btn-lg btn-primary px-5"><i class="fas fa-download"></i> Download
+                Report (PDF)</a>
+        </div>
+
+        <div class="disclaimer-box text-center">
+            ⚠️ IMPORTANT DISCLAIMER: This tool is for educational purposes only. Always consult a certified medical
+            professional.
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('top3Chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for disease, confidence in result.top3_predictions %}
+                    '{{ disease }}',
+                    {% endfor %}
+                ],
+            datasets: [{
+                label: 'Confidence %',
+                data: [
+                    {% for disease, confidence in result.top3_predictions %}
+                        {{ confidence }},
+            {% endfor %}
+        ],
+            backgroundColor: ['#00B4D8', '#0077B6', '#023E8A'],
+            borderColor: '#CAF0F8',
+            borderWidth: 1
+                }]
+            },
+            options: {
+            indexAxis: 'y',
+            scales: {
+                x: { beginAtZero: true, max: 100, grid: { color: '#333' } },
+                y: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
+        }
+        });
+    </script>
+</body>
+
+</html>

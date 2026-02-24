@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Catalog - MediPredict AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <a class="navbar-brand fw-bold" href="/">🏥 MediPredict AI</a>
+        <ul class="navbar-nav ms-auto flex-row gap-3">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/about" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center text-primary mb-4">Predicted Diseases Catalog</h1>
+        <p class="text-center mb-5">Browse information about 41 different diseases our AI can detect.</p>
+
+        <div class="row g-4">
+            {% for disease in diseases %}
+            <div class="col-md-4">
+                <div class="card h-100 p-4">
+                    <h4 class="text-info">{{ disease.Disease }}</h4>
+                    <p class="text-secondary small">{{ disease.Description[:100] }}...</p>
+                    <button class="btn btn-sm btn-outline-accent mt-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#desc{{ loop.index }}">
+                        Read More
+                    </button>
+                    <div class="collapse mt-2" id="desc{{ loop.index }}">
+                        <p>{{ disease.Description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="disclaimer-box text-center mt-5">
+            ⚠️ IMPORTANT DISCLAIMER: This tool is for educational purposes only. Always consult a certified medical
+            professional.
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

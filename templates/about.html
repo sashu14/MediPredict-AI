@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MediPredict AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <a class="navbar-brand fw-bold" href="/">🏥 MediPredict AI</a>
+        <ul class="navbar-nav ms-auto flex-row gap-3">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/diseases" class="nav-link">Diseases</a></li>
+        </ul>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center text-primary mb-5">About MediPredict AI</h1>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card p-4 h-100">
+                    <h3>Project Overview</h3>
+                    <p>MediPredict AI is a state-of-the-art disease prediction system that utilizes multiple machine
+                        learning algorithms to provide accurate health insights based on user-reported symptoms.</p>
+                    <p>Techniques used: Random Forest (Primary), Naive Bayes, and Support Vector Machines (SVM). The
+                        system uses model voting to increase reliability.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-4 h-100">
+                    <h3>Tech Stack</h3>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="tag">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">Scikit-Learn</span>
+                        <span class="tag">Pandas</span>
+                        <span class="tag">Bootstrap 5</span>
+                        <span class="tag">Chart.js</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card p-4">
+                    <h3>Dataset Credit</h3>
+                    <p>This project uses the <strong>"Disease Prediction using Machine Learning"</strong> dataset from
+                        Kaggle, which includes 4920 records of symptoms for 41 unique diseases.</p>
+                    <a href="https://www.kaggle.com/datasets/kaushil268/disease-prediction-using-machine-learning"
+                        class="btn btn-outline-info" target="_blank">View on Kaggle</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="disclaimer-box text-center mt-5">
+            ⚠️ IMPORTANT DISCLAIMER: This tool is for educational purposes only. Always consult a certified medical
+            professional.
+        </div>
+    </div>
+</body>
+
+</html>
