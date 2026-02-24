@@ -15,6 +15,8 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.0-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 ![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
+[**🔗 View Live App on Streamlit Cloud**](https://medipredict-ai-fs7t7in83fpnncbgtc2hvv.streamlit.app/)
+
 MediPredict AI is a production-ready Disease Prediction System that analyzes user symptoms using multiple Machine Learning models to provide a highly accurate diagnosis, detailed descriptions, and recommended precautions.
 
 ## ✨ Features
